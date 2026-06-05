@@ -60,15 +60,16 @@
 pm_collect.sh
 ├── pm_collect_primary.sql                      # หัวข้อ 2.1 (รันบน PRIMARY)
 ├── pm_collect_standby.sql                      # หัวข้อ 2.2 (รันบน STANDBY)
-├── generate_report.py                       # สร้างรายงาน .docx (python-docx)
-├── หน้าปกรายงาน_PM_วิทยุการบินv2.docx      # cover template (ไม่แก้ไข)
-└── output/YYYYMM/
+├── generate_report.py                          # สร้างรายงาน .docx (python-docx)
+├── หน้าปกรายงาน_วิทยุการบิน_AMSS.docx        # cover template (ไม่แก้ไข)
+└── output/YYYYMM_HOSTNAME/
     ├── {cdb}_PRIMARY_{host}_{YYYYMM}.txt
     ├── {cdb}_STANDBY_{host}_{YYYYMM}.txt
-    ├── inventory_{host}_{YYYYMM}.txt        # รายชื่อ CDB + PDB ทุก instance
-    ├── network_test_{host}_{YYYYMM}.txt     # OS-level network test (ping, nc)
-    ├── pm_collect_{host}_{YYYYMM}.log
-    └── รายงานการบำรุงรักษาระบบฐานข้อมูล_AMSS_{YEAR}_{SEQ}.docx
+    ├── inventory_{host}_{YYYYMM}.txt           # รายชื่อ CDB + PDB ทุก instance
+    ├── oracle_config_{host}_{YYYYMM}.txt       # Platform, Edition, Oracle Home
+    ├── listener_{host}_{YYYYMM}.txt            # lsnrctl status
+    ├── network_test_{host}_{YYYYMM}.txt        # tnsping test
+    └── pm_collect_{host}_{YYYYMM}.log
 ```
 
 ### Flow การรัน (pm_collect.sh)
@@ -87,9 +88,9 @@ pm_collect.sh
 **File**: `pm_collect_standby.sql`
 **Role**: PHYSICAL STANDBY
 **Status**: ✅ tested บน amsscdb@dbsystem1 (19.31.0.0.0) — ไม่มี error
-**Output**: `output/YYYYMM/{cdb}_STANDBY_{host}_{YYYYMM}.txt` (dynamic จาก `v$database` + `v$instance`)
+**Output**: `output/YYYYMM_HOSTNAME/{cdb}_STANDBY_{host}_{YYYYMM}.txt` (dynamic จาก `v$database` + `v$instance`)
 
-### Sections
+### Sections (Standby)
 
 | Section | หัวข้อ 2.2 | Views หลัก |
 |---|---|---|
@@ -98,9 +99,10 @@ pm_collect.sh
 | [2.2-2] Gap / Lag | Archive Gap, MRP/Apply Status, Lag | `v$archive_gap`, `v$managed_standby`, `v$dataguard_stats` |
 | [2.2-3] Log Transport & Apply | Dest Status, Redo Apply Rate | `v$archive_dest_status`, `v$recovery_progress` |
 | [2.2-4] Disk & FRA | FRA Summary, FRA by Type, Tablespace | `v$recovery_file_dest`, `v$flash_recovery_area_usage`, `dba_data_files` |
-| [2.2-5] Alert Log | Last 30 days, filter `%ORA-%` only, linesize 240, col 200 | `v$diag_alert_ext` |
+| [2.2-5] Alert Log | Last 31 days, filter `%ORA-%` only, linesize 240, col 200 | `v$diag_alert_ext` |
 | [2.2-6] Backup / RMAN | RMAN job history 32 วัน (linesize 160, ไม่มี session_key) — มักว่างเปล่าถ้า backup รันจาก Primary เท่านั้น | `v$rman_backup_job_details` |
 | [2.1-7] Patch / Version (Standby) | Database Version, Installed Components, Applied Patches — เหมือน primary แต่รันบน Standby | `v$instance`, `dba_registry`, `dba_registry_sqlpatch` |
+| [2.2-7] Network Bandwidth | Archive Dest Network Config, Transport/Apply Lag Summary | `v$archive_dest`, `v$dataguard_stats` |
 
 ---
 
@@ -109,9 +111,9 @@ pm_collect.sh
 **File**: `pm_collect_primary.sql`
 **Role**: PRIMARY
 **Status**: ✅ tested บน amsscdb/fdmccdb/fdmscdb@dbsystem2 (19.30.0.0.0) — ไม่มี error
-**Output**: `output/YYYYMM/{cdb}_PRIMARY_{host}_{YYYYMM}.txt` (dynamic จาก `v$database` + `v$instance`)
+**Output**: `output/YYYYMM_HOSTNAME/{cdb}_PRIMARY_{host}_{YYYYMM}.txt` (dynamic จาก `v$database` + `v$instance`)
 
-### Sections
+### Sections (Primary)
 
 | Section | หัวข้อ 2.1 | Views หลัก |
 |---|---|---|
@@ -119,7 +121,7 @@ pm_collect.sh
 | [1.2 - DB Environment] | Global DB Name, SID, DB Location, Archive Dir/Mode, Flashback, Character Set | `global_name`, `v$database`, `v$parameter`, `nls_database_parameters` |
 | [2.1-1] Instance Status | Instance status, uptime | `v$instance` |
 | [2.1-2] Tablespace / Temp / Undo / Redo | TS usage (CDB+PDB), Temp (GB format เหมือน CDB Root), Undo stats, Redo log, Archive gen, FRA | `dba_segments`, `dba_data_files`, `cdb_segments`, `cdb_data_files`, `v$pdbs`, `dba_temp_free_space`, `dba_temp_files`, `v$undostat`, `v$log`, `v$archived_log`, `v$recovery_file_dest`, `v$flash_recovery_area_usage` |
-| [2.1-3] Alert Log | Last 30 days, filter `%ORA-%` only, linesize 240, col 200 | `v$diag_alert_ext` |
+| [2.1-3] Alert Log | Last 31 days, filter `%ORA-%` only, linesize 240, col 200 | `v$diag_alert_ext` |
 | [2.1-4] Performance | AWR summary 31 วัน; Top 10 SQL stats (PDB only, con_id>1, group by **pdb_name+sql_id**, columns: PDB+SQL_ID+stats); Top 10 SQL Full Text (3-col table: PDB+SQL_ID+text, ordered by elapsed); Top 15 Wait Events delta 31 วัน (**dba_hist_system_event**, column=`event_name`, filter by dbid) | `dba_hist_snapshot`, `dba_hist_sqlstat`, `dba_hist_sqltext`, `dba_hist_system_event`, `v$pdbs` |
 | [2.1-5] Backup / RMAN | RMAN job history 32 วัน (ไม่มี session_key, status a30, input_type a25, **linesize 160** เพื่อป้องกัน wrap) | `v$rman_backup_job_details` |
 | [2.1-6] Parameters | Key params, SGA components, PGA stats | `v$parameter`, `v$sgainfo`, `v$pgastat` |
@@ -264,7 +266,9 @@ Section 3  Active Data Guard  [STANDBY]
   3.1  AMSSCDB (STANDBY @ dbsystem1)
     3.1.1  DG Configuration & Sync Status  (รายละเอียดของผลลัพธ์)
     3.1.2  Gap / Lag / Apply Delay  (รายละเอียดของผลลัพธ์)
-    3.1.3  Log Transport & Apply Service  (รายละเอียดของผลลัพธ์)
+    3.1.3  Log Transport & Apply Service
+      3.1.3.1  Archive Dest Status  (รายละเอียดของผลลัพธ์)
+      3.1.3.2  Redo Apply Rate  (รายละเอียดของผลลัพธ์)
     3.1.4  Disk Usage & FRA  (รายละเอียดของผลลัพธ์)
     3.1.5  Alert Log (Standby)  (รายละเอียดของผลลัพธ์)
     3.1.6  RMAN on Standby  (รายละเอียดของผลลัพธ์)
@@ -297,6 +301,7 @@ Section 6  สรุปผลการตรวจสอบ (Summary)
 
 ### Checklist Table
 - คอลัมน์ **สถานะ**: แสดง 2 บรรทัดในเซลล์เดียว (`w:br` คั่นกลาง)
+
   ```
   ☐  ปกติ
   ☐  ไม่ปกติ
@@ -317,7 +322,7 @@ Section 6  สรุปผลการตรวจสอบ (Summary)
 | 5.2 Bandwidth | ผลทดสอบ manual file transfer |
 
 ### SQL Command Display
-ทุก section ที่แสดงผล query จะมี **"คำสั่ง SQL:" box** (สี `#EBF3FB`) ก่อน result — sourced จาก `pm_collect_primary.sql` / `pm_collect_standby.sql` ผ่าน `SqlScriptReader` class  
+ทุก section ที่แสดงผล query จะมี **"คำสั่ง SQL:" box** (สี `#EBF3FB`) ก่อน result — sourced จาก `pm_collect_primary.sql` / `pm_collect_standby.sql` ผ่าน `SqlScriptReader` class
 - Global instances: `SQL_PRIMARY`, `SQL_STANDBY` (load ตอน import)
 - Helper: `add_sql_cmd(doc, sql_text)` — Courier New 8pt, สี navy
 - หากไม่พบ label ที่ตรงกัน box จะไม่แสดง (silent skip)
@@ -381,7 +386,7 @@ whenever sqlerror continue
 -- << spool setup และ host mkdir อยู่ตรงนี้ >>
 
 -- Phase 2: หลัง spool
-set linesize 200
+set linesize 115   -- default; Alert Log ใช้ 240, RMAN ใช้ 160
 set pagesize 50
 set trimspool on
 set heading on

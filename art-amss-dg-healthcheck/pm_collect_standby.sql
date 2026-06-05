@@ -313,7 +313,7 @@ select
     substr(message_text,1,200)                               message_text
 from v$diag_alert_ext
 where message_text like '%ORA-%'
-  and originating_timestamp >= sysdate - 30
+  and originating_timestamp >= sysdate - 31
 order by originating_timestamp desc
 fetch first 30 rows only;
 

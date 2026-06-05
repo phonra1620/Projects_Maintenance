@@ -108,7 +108,7 @@ class LogReader:
             self._sections[label] = self._split_subs(text[start:end])
 
     def _split_subs(self, content: str) -> dict:
-        sub_re = re.compile(r"^--- (.+?) -- PROMPT\s*$", re.MULTILINE)
+        sub_re = re.compile(r"^---\s+(.+?)(?:\s+--\s+PROMPT)?\s*---\s*$", re.MULTILINE)
         matches = list(sub_re.finditer(content))
         result = {"__full__": content.strip()}
         if matches:

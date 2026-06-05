@@ -375,7 +375,7 @@ select
     substr(message_text,1,200)                               message_text
 from v$diag_alert_ext
 where message_text like '%ORA-%'
-  and originating_timestamp >= sysdate - 30
+  and originating_timestamp >= sysdate - 31
 order by originating_timestamp desc
 fetch first 30 rows only;
 
@@ -389,8 +389,7 @@ PROMPT  [2.1 - 4] PERFORMANCE (AWR / Top SQL / Wait Events)
 PROMPT ========================================================
 PROMPT
 PROMPT  NOTE: ข้อมูล AWR/Top SQL ย้อนหลัง 31 วัน (หรือตาม retention ของ AWR ที่มี)
-PROMPT        Wait Events: ยอดสะสมตั้งแต่ Instance เริ่มทำงาน (cumulative since startup)
-PROMPT        Active Sessions: สถานะ ณ เวลาที่รัน script
+PROMPT        Wait Events: delta จาก dba_hist_system_event ย้อนหลัง 31 วัน
 PROMPT
 
 PROMPT --- AWR Snapshots (Last 31 Days) ---
