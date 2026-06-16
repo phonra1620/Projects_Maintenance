@@ -25,6 +25,23 @@
 | 4 | ซอฟต์แวร์ระบบจัดการฐานข้อมูลส่วนต่อขยาย (Database Management Expansion) | ดูรายละเอียดด้านล่าง |
 | 5 | Microsoft Windows Server + Windows Server Failover Cluster (WSFC) | 2019 Standard Edition |
 
+### รายละเอียด Item 1 — Oracle License (CSI# 23023146)
+
+| Product | Qty | License Metric | License Type |
+| ------- | --- | -------------- | ------------ |
+| Oracle Database Enterprise Edition | 8 | Processor Perpetual | FULL USE |
+| Oracle Cloud Management Pack for Oracle Database | 8 | Processor Perpetual | FULL USE |
+| Oracle Database Lifecycle Management Pack | 8 | Processor Perpetual | FULL USE |
+| Oracle Real Application Clusters | 8 | Processor Perpetual | FULL USE |
+| Oracle WebLogic Server Enterprise Edition | 4 | Processor Perpetual | FULL USE |
+
+| Support Type | ช่วงเวลา |
+| ------------ | -------- |
+| Reinstatement Fee | 1-Nov-2025 ถึง 31-Mar-2026 |
+| Software Update License & Support | 1-Apr-2026 ถึง 30-Apr-2027 |
+
+> WebLogic Server EE อยู่ใน CSI# เดียวกัน (23023146) แต่ Qty 4 processors (ไม่ใช่ 8)
+
 ### รายละเอียด Item 4 — Database Management Expansion (License Add-ons)
 
 #### Enterprise Edition Options
