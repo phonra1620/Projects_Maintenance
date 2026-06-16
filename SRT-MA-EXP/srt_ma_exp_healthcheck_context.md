@@ -1,17 +1,18 @@
 # SRT MA-EXP Health Check — Project Context
 
 ## Project Overview
+
 - **รหัสโครงการ**: I-2026-APW-MA-027
 - **ชื่อโครงการ**: จ้างบริการบำรุงรักษาระบบฐานข้อมูลแม่ข่ายและระบบบริการฐานข้อมูลส่วนเพิ่มขยาย (SRT Database Cloud + Expand)
 - **Goal**: รายงานผลการบำรุงรักษา + รายงานการเฝ้าระวังภัยคุกคาม ส่งลูกค้าราย 3 เดือน (รายไตรมาส)
-- **แพลตฟอร์ม**: Oracle RAC 19c, Microsoft SQL Server
+- **แพลตฟอร์ม**: Oracle RAC 19c, Microsoft SQL Server 2019, Windows Server 2019 + WSFC
 
 ---
 
 ## รายงานที่ต้องส่ง
 
 | รายงาน | ข้อสัญญา | คาบเวลา |
-|--------|----------|---------|
+| ------ | -------- | ------- |
 | รายงานการบำรุงรักษา | ข้อ 3.7 | ราย 3 เดือน (รายไตรมาส) |
 | รายงานการเฝ้าระวังภัยคุกคามทางสารสนเทศ | ข้อ 3.13 | ราย 3 เดือน (รายไตรมาส) |
 
@@ -21,7 +22,7 @@
 
 ### รายงาน 1: รายงานการบำรุงรักษา (ข้อ 3.7)
 
-```
+```text
 [หน้าปก]
   ชื่อโครงการ
   ชื่อผู้รับจ้าง
@@ -53,20 +54,24 @@ Section 2  Oracle RAC 19c
     2.4.2  Top Wait Events
   2.5  รายการตรวจสอบ (Checklist)
 
-Section 3  Microsoft SQL Server
-  3.1  Service & Instance Status
-    3.1.1  SQL Server Service Status
-    3.1.2  SQL Server Agent Status
-  3.2  Database Integrity
-    3.2.1  DBCC CHECKDB Results
-  3.3  Maintenance Jobs
-    3.3.1  Index Rebuild / Reorganize
-    3.3.2  Update Statistics
-    3.3.3  Job History Summary
-  3.4  Log Review
-    3.4.1  SQL Server Error Log
-    3.4.2  Windows Event Log (Database-related)
-  3.5  รายการตรวจสอบ (Checklist)
+Section 3  Microsoft SQL Server + WSFC
+  3.1  Windows Server Failover Cluster
+    3.1.1  Cluster Node Status
+    3.1.2  Quorum Status
+    3.1.3  Cluster Event Log
+  3.2  Service & Instance Status
+    3.2.1  SQL Server Service Status
+    3.2.2  SQL Server Agent Status
+  3.3  Database Integrity
+    3.3.1  DBCC CHECKDB Results
+  3.4  Maintenance Jobs
+    3.4.1  Index Rebuild / Reorganize
+    3.4.2  Update Statistics
+    3.4.3  Job History Summary
+  3.5  Log Review
+    3.5.1  SQL Server Error Log
+    3.5.2  Windows Event Log (Database-related)
+  3.6  รายการตรวจสอบ (Checklist)
 
 Section 4  Oracle Enterprise Manager 13c + WebLogic Server 12c
   4.1  EM Console & OMS Status
@@ -88,7 +93,7 @@ Section 5  สรุปผลการบำรุงรักษา
 
 ### รายงาน 2: รายงานการเฝ้าระวังภัยคุกคามทางสารสนเทศ (ข้อ 3.13)
 
-```
+```text
 [หน้าปก]
   ชื่อโครงการ
   ชื่อผู้รับจ้าง
@@ -124,7 +129,7 @@ Section 4  Vulnerability Assessment
 ## หัวข้อตรวจสอบ Oracle RAC 19c (Preventive Checklist)
 
 | หัวข้อ | รายการตรวจสอบ | Views / Commands หลัก |
-|--------|--------------|----------------------|
+| ------ | ------------ | --------------------- |
 | Clusterware & Instance | Grid Infrastructure status, Node status ทุก node | `crsctl stat res -t`, `srvctl status database` |
 | Storage & ASM | ASM Disk Group usage/status | `v$asm_diskgroup`, `v$asm_disk` |
 | Alert Log | Critical errors (ORA-) 31 วันล่าสุด | `v$diag_alert_ext` |
@@ -146,10 +151,13 @@ Section 4  Vulnerability Assessment
 
 ---
 
-## หัวข้อตรวจสอบ Microsoft SQL Server (Preventive Checklist)
+## หัวข้อตรวจสอบ Microsoft SQL Server + WSFC (Preventive Checklist)
 
 | หัวข้อ | รายการตรวจสอบ | Commands หลัก |
-|--------|--------------|--------------|
+| ------ | ------------ | ------------- |
+| WSFC — Cluster Health | Cluster service status, Node status (Up/Down/Paused) | `Get-ClusterNode`, `Get-Cluster` |
+| WSFC — Quorum | Quorum resource status, Disk Witness / Cloud Witness | `Get-ClusterQuorum` |
+| WSFC — Cluster Events | Critical events ใน Cluster Event Log | Windows Event Viewer → FailoverClustering |
 | Service & Instance | SQL Server Service, SQL Server Agent | `Get-Service MSSQL*`, `EXEC xp_servicecontrol` |
 | Database Integrity | DBCC CHECKDB ทุก database | `DBCC CHECKDB` |
 | Index Maintenance | Rebuild / Reorganize, Update Statistics | `sys.dm_db_index_physical_stats`, SQL Agent Job history |
@@ -161,7 +169,7 @@ Section 4  Vulnerability Assessment
 
 คอลัมน์ **สถานะ** แสดง 2 บรรทัดในเซลล์เดียว:
 
-```
+```text
 ☐  ปกติ
 ☐  ไม่ปกติ
 ```
@@ -169,9 +177,10 @@ Section 4  Vulnerability Assessment
 ---
 
 ## Next Steps
+
 - 🔲 สร้าง `pm_collect_oracle_rac.sh` สำหรับเก็บข้อมูล Oracle RAC
 - 🔲 สร้าง `pm_collect_rac.sql` (Primary SQL script สำหรับ RAC — ไม่มี DG)
-- 🔲 สร้าง `pm_collect_mssql.sql` หรือ PowerShell script สำหรับ MSSQL
+- 🔲 สร้าง `pm_collect_mssql.sql` หรือ PowerShell script สำหรับ MSSQL + WSFC
 - 🔲 สร้าง `generate_report_maintenance.py` — รายงานการบำรุงรักษา (ข้อ 3.7)
 - 🔲 สร้าง `generate_report_security.py` — รายงานเฝ้าระวังภัยคุกคาม (ข้อ 3.13)
 - 🔲 ออกแบบ template หน้าปก (SRT)

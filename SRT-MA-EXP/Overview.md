@@ -23,6 +23,8 @@
 
 ## Infrastructure (จาก Survey)
 
+### Oracle RAC 19c (Solaris)
+
 | รายการ | ข้อมูล |
 | ------ | ------ |
 | OS | Oracle Solaris 11.4.19.3.0 (SunOS 5.11) |
@@ -33,6 +35,15 @@
 | Databases | OLAPCDB, OLTPCDB, SRTDW, TRAINING |
 | CDB | ใช่ (พบ PDB: PRODMEDB, APEXDB) |
 | ASM Disk Groups | DATA (12.5 TB), RECO (18.9 TB), OCR_VOTE |
+
+### Microsoft SQL Server (Windows)
+
+| รายการ | ข้อมูล |
+| ------ | ------ |
+| OS | Microsoft Windows Server 2019 Standard Edition |
+| Cluster | Windows Server Failover Cluster (WSFC) |
+| SQL Server | Microsoft SQL Server 2019 Standard Edition |
+| Hostnames | — (ยังไม่ยืนยัน) |
 
 ---
 
@@ -76,12 +87,13 @@
 - Backup / RMAN Status
 - Performance (CPU/Memory, Top Wait Events AWR 31 วัน)
 
-### Microsoft SQL Server
+### Microsoft SQL Server + WSFC
 
+- **Windows Server Failover Cluster**: Cluster Node Status, Cluster Service, Quorum
 - Service & Instance Status (SQL Server Service, SQL Agent)
 - Database Integrity (DBCC CHECKDB)
 - Maintenance Jobs (Index Rebuild/Reorganize, Update Statistics)
-- Log Review (SQL Server Error Log, Windows Event Log)
+- Log Review (SQL Server Error Log, Windows Event Log, Cluster Event Log)
 
 ### Oracle Enterprise Manager 13c + WebLogic Server 12c
 
