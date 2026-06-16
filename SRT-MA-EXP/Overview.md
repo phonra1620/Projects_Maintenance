@@ -36,6 +36,17 @@
 
 ---
 
+## รายการซอฟต์แวร์ที่ต้องตรวจสอบ (ตามสัญญา)
+
+| รายการ | ซอฟต์แวร์ | เวอร์ชัน |
+| ------ | --------- | -------- |
+| 1 | Oracle Database + Cloud Management Pack + Database Lifecycle Management Pack + Real Application Clusters | 19c Enterprise Edition |
+| 2 | Microsoft SQL Server | 2019 Standard Edition |
+| 3 | Oracle Enterprise Manager (Management Server) + WebLogic Server | EM 13c / WebLogic 12c Enterprise Edition |
+| 4 | ซอฟต์แวร์ระบบจัดการฐานข้อมูลส่วนต่อขยาย (Database Management Expansion) | — |
+
+---
+
 ## ขอบเขตงาน
 
 ### Oracle RAC 19c
@@ -53,6 +64,14 @@
 - Database Integrity (DBCC CHECKDB)
 - Maintenance Jobs (Index Rebuild/Reorganize, Update Statistics)
 - Log Review (SQL Server Error Log, Windows Event Log)
+
+### Oracle Enterprise Manager 13c + WebLogic Server 12c
+
+- EM Console Availability & Login
+- Managed Targets Status (Databases, Listeners)
+- Agent Status (OMS Agent บน server ที่ Monitor)
+- WebLogic Server: Admin Server & Managed Server Status
+- EM Repository Database Health
 
 ### Security (ข้อ 3.11 + 3.13)
 
@@ -78,7 +97,7 @@
 
 - [ ] PDB แต่ละ CDB ครบหรือไม่ (PRODMEDB, APEXDB อยู่ใน CDB ไหน? SRTDW/TRAINING เป็น CDB ด้วยไหม?)
 - [ ] Oracle patch version
-- [ ] MSSQL: server, version, edition
+- [x] MSSQL: Microsoft SQL Server 2019 Standard Edition
 - [ ] วิธี connect เข้า server (SSH / Bastion)
 
 ---

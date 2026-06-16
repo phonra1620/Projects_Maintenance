@@ -68,7 +68,13 @@ Section 3  Microsoft SQL Server
     3.4.2  Windows Event Log (Database-related)
   3.5  รายการตรวจสอบ (Checklist)
 
-Section 4  สรุปผลการบำรุงรักษา
+Section 4  Oracle Enterprise Manager 13c + WebLogic Server 12c
+  4.1  EM Console & OMS Status
+  4.2  Managed Targets Status
+  4.3  WebLogic Admin/Managed Server Status
+  4.4  รายการตรวจสอบ (Checklist)
+
+Section 5  สรุปผลการบำรุงรักษา
   - ตาราง: ระบบ | รายการ | ผลการตรวจสอบ | สถานะ | หมายเหตุ
   - ปัญหาหรือสิ่งผิดปกติที่ตรวจพบ
   - ข้อเสนอแนะและแนวทางแก้ไข
@@ -125,6 +131,18 @@ Section 4  Vulnerability Assessment
 | Tablespace | Usage per tablespace (CDB + PDB) | `dba_data_files`, `cdb_data_files`, `v$pdbs` |
 | Backup / RMAN | Job history 32 วัน | `v$rman_backup_job_details` |
 | Performance | CPU/Memory, Top Wait Events (AWR 31 วัน) | `dba_hist_system_event`, `dba_hist_sqlstat`, `v$pgastat`, `v$sgainfo` |
+
+---
+
+## หัวข้อตรวจสอบ Oracle Enterprise Manager 13c + WebLogic (Preventive Checklist)
+
+| หัวข้อ | รายการตรวจสอบ | Commands / URL หลัก |
+| ------ | ------------ | ------------------- |
+| EM Console | OMS Service status, Login ได้ปกติ | `emctl status oms` |
+| Managed Targets | Database/Listener targets ที่ monitor อยู่ status Up | EM Console → Targets |
+| EM Agent | Agent บน server ที่ monitor: status, last upload | `emctl status agent` |
+| WebLogic | Admin Server & Managed Server status | `wlst.sh`, EM Console → WebLogic |
+| EM Repository | Repository DB health (tablespace, alert log) | EM Console → Repository |
 
 ---
 
