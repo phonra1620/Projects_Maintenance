@@ -43,7 +43,25 @@
 | 1 | Oracle Database + Cloud Management Pack + Database Lifecycle Management Pack + Real Application Clusters | 19c Enterprise Edition |
 | 2 | Microsoft SQL Server | 2019 Standard Edition |
 | 3 | Oracle Enterprise Manager (Management Server) + WebLogic Server | EM 13c / WebLogic 12c Enterprise Edition |
-| 4 | ซอฟต์แวร์ระบบจัดการฐานข้อมูลส่วนต่อขยาย (Database Management Expansion) | — |
+| 4 | ซอฟต์แวร์ระบบจัดการฐานข้อมูลส่วนต่อขยาย (Database Management Expansion) | ดูรายละเอียดด้านล่าง |
+
+### รายละเอียด Item 4 — Database Management Expansion (License Add-ons)
+
+#### Enterprise Edition Options
+
+| Option | หน้าที่ |
+| ------ | ------- |
+| Real Application Clusters (RAC) | High Availability — run DB บน multiple nodes |
+| Multitenant | CDB/PDB architecture — รัน multiple PDB ใน 1 CDB |
+
+#### Database Enterprise Management Packs
+
+| Pack | หน้าที่ |
+| ---- | ------- |
+| Lifecycle Management | Patch, Provisioning, Configuration Management ผ่าน EM |
+| Cloud Management | Self-service portal, Resource metering ผ่าน EM |
+| Diagnostics | AWR, ASH, ADDM — Performance diagnostics |
+| Tuning | SQL Tuning Advisor, SQL Access Advisor |
 
 ---
 
