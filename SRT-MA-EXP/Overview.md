@@ -55,6 +55,7 @@
 | 2 | Microsoft SQL Server | 2019 Standard Edition |
 | 3 | Oracle Enterprise Manager (Management Server) + WebLogic Server | EM 13c / WebLogic 12c Enterprise Edition |
 | 4 | ซอฟต์แวร์ระบบจัดการฐานข้อมูลส่วนต่อขยาย (Database Management Expansion) | ดูรายละเอียดด้านล่าง |
+| 5 | Microsoft Windows Server + Windows Server Failover Cluster (WSFC) | 2019 Standard Edition |
 
 ### รายละเอียด Item 4 — Database Management Expansion (License Add-ons)
 
