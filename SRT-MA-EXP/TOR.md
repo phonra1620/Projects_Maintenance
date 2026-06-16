@@ -60,6 +60,23 @@
 | Diagnostics | AWR, ASH, ADDM — Performance diagnostics |
 | Tuning | SQL Tuning Advisor, SQL Access Advisor |
 
+#### รายละเอียด Item 4 — Oracle License (CSI# 27500566)
+
+| Product | Qty | License Metric | License Type |
+| ------- | --- | -------------- | ------------ |
+| Oracle Database Enterprise Edition | 4 | Processor Perpetual | FULL USE |
+| Oracle Cloud Management Pack for Oracle Database | 4 | Processor Perpetual | FULL USE |
+| Oracle Database Lifecycle Management Pack | 4 | Processor Perpetual | FULL USE |
+| Oracle Real Application Clusters | 4 | Processor Perpetual | FULL USE |
+| Oracle Diagnostics Pack | 12 | Processor Perpetual | FULL USE |
+| Oracle Multitenant | 12 | Processor Perpetual | FULL USE |
+| Oracle Tuning Pack | 12 | Processor Perpetual | FULL USE |
+
+| Support Type | ช่วงเวลา |
+| ------------ | -------- |
+| Reinstatement Fee | 25-Feb-2026 ถึง 31-Mar-2026 |
+| Software Update License & Support | 1-Apr-2026 ถึง 30-Apr-2027 |
+
 ---
 
 ## ข้อกำหนดการเข้าปฏิบัติงาน
